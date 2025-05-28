@@ -59,19 +59,6 @@ function formatData(data) {
     }
 }
 
-// Anti-tampering bypass
-function bypassAntiTampering() {
-    const ptrace = Module.findExportByName(null, "ptrace");
-    if (ptrace) {
-        Interceptor.attach(ptrace, {
-            onEnter: function(args) {
-                args[0] = ptr(0);
-                console.log(`${COLORS.green}[✓] App protection bypassed${COLORS.reset}`);
-            }
-        });
-    }
-}
-
 // SSL Pinning Bypass
 function bypassSSLPinning() {
     const SecTrustEvaluate = Module.findExportByName("Security", "SecTrustEvaluate");
@@ -195,7 +182,6 @@ function hookNetworkActivity() {
 
 // Main execution
 if (ObjC.available) {
-    bypassAntiTampering();
     bypassSSLPinning();
     hookNetworkActivity();
     console.log(`${COLORS.green}[✓] Everything’s set up! Monitoring started.${COLORS.reset}`);
